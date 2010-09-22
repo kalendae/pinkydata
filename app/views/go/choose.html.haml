@@ -1,0 +1,8 @@
+%h1 Welcome #{user.name}
+- if user.gender
+  %p You are a #{user.gender}
+
+#{image_tag(user.pic('type' => 'large'))}
+%p &nbsp;
+
+%h1 #{user.first_name}, pick a friend of yours:

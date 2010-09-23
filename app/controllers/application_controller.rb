@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
-  before_filter :facebook_auth_check
+
   before_filter :session_check
+  before_filter :facebook_auth_check
+  after_filter :clear_user_object
 
-
+  helper_method :user
 
   def facebook_auth_check
     if params[:fb_sig_user] and params[:fb_sig_session_key]
@@ -21,7 +22,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # part of the fix for safari with third party cookie prevention 
   def session_check
+    cookies['safari_cookie_fix'] = 'cookie OK'
     true
   end
 
@@ -38,6 +41,14 @@ class ApplicationController < ActionController::Base
         </noscript>
       </head></html>
     HTML
+  end
+
+  def user
+    session[:user]
+  end
+
+  def clear_user_object
+    user.clear_for_placement_into_cookies if user
   end
 
 end

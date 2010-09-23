@@ -14,8 +14,16 @@ class User
     graph.get_local_picture(self.uid, args)
   end
 
+  def pic_for uid, args
+    graph.get_local_picture(uid, args)
+  end
+
   def friends
-    @friends ||= retrieve_friends
+    @friends ||= graph.get_connections(self.uid, 'friends')
+  end
+
+  def likes
+    @likes ||= Like.for(graph.get_connections(self.uid, 'likes'))
   end
 
   def method_missing(method, *args, &block)
@@ -27,13 +35,28 @@ class User
     end
   end
 
+  def likes_intersecting_with friend
+    friend.likes & self.likes
+  end
+
+  def likes_unique_against friend
+    self.likes - friend.likes
+  end
+
+  def likes_before friend
+    likes_intersecting_with(friend).select{|l| friend.likes.find{|fl| fl == l}.created_time > l.created_time}
+  end
+
+  def clear_for_placement_into_cookies
+    @likes = nil
+    @graph = nil
+    @profile = nil
+  end
+
   private
 
   def graph
     @graph ||= Koala::Facebook::GraphAPI.new(self.token)
-  end
-
-  def retrieve_friends
   end
 
 end

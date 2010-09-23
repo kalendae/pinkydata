@@ -7,6 +7,27 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+<script>
+    // part of the fix for safari with third party cookie prevention 
+	function safariFixSession(sess_id, controller) {
+		console.log('no cookie found');
+		var url = location.href;
+		var url_with_redirect = controller + "?redirect_to=" + url;
+
+		$$('body')[0].insert("<form id='safariFixSession'></form>");
+		var f = $('safariFixSession')
+		f.method = 'POST';
+		f.action = url_with_redirect;
+		var m = document.createElement('input');
+		m.setAttribute('type', 'hidden');
+		m.setAttribute('name', '_session_id');
+		m.setAttribute('value', sess_id);
+		f.appendChild(m);
+		f.submit();
+	}
+
+	if (document.cookie.indexOf("safari_cookie_fix") == -1) safariFixSession("<%= session[:session_id] %>", "go/set_third_party_cookie_fix");
+</script>
 
 <%= yield %>
 

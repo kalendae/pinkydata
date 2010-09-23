@@ -1,2 +1,33 @@
-<h1>Go#result</h1>
-<p>Find me in app/views/go/result.html.erb</p>
+= link_to "<< go back to pick a different friend", go_choose_url
+
+- if user.likes_intersecting_with(@friend).size > 0
+
+  %h1 What #{square(user)} and #{square(@friend)} have in common:
+
+  - user.likes_intersecting_with(@friend).each do |like|
+    = render :partial => "like", :object =>  like
+
+  - if user.likes_before(@friend).size > 0
+    %h2 #{small_sq(user)} liked these before #{small_sq(@friend)}
+    - user.likes_before(@friend).each do |like|
+      = render :partial => "like", :object => like
+
+  - if @friend.likes_before(user).size > 0
+    %h2 #{small_sq(@friend)} liked these before #{small_sq(user)}
+    - @friend.likes_before(user).each do |like|
+      = render :partial => "like", :object => like
+
+- else
+
+  %h1 #{square(user)} and #{square(@friend)} have no likes in common.
+
+%h1 #{small_sq(user)} likes:
+
+- user.likes.each do |like|
+  = render :partial => "like", :object =>  like, :locals => {:show_time => true}
+
+
+%h1 #{small_sq(@friend)} likes:
+
+- @friend.likes.each do |like|
+  = render :partial => "like", :object =>  like, :locals => {:show_time => true}

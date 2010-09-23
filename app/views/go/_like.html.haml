@@ -1,0 +1,7 @@
+- show_time ||= false
+.like
+  #{like.name} (#{like.category})
+  - if show_time
+    liked #{time_ago_in_words(like.created_time)} ago 
+  
+

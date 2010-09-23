@@ -1,8 +1,13 @@
 %h1 Welcome #{user.name}
-- if user.gender
-  %p You are a #{user.gender}
 
-#{image_tag(user.pic('type' => 'large'))}
+#{image_tag(user.pic('type' => 'small'))}
 %p &nbsp;
 
 %h1 #{user.first_name}, pick a friend of yours:
+
+- user.friends.each do |f|
+  .friend(style="float:left;margin:10px;width:160px;height:60px;")
+    .friend_img(style="float:left;")
+      %a(href="#{go_result_url(:friend => f['id'])}") #{image_tag(user.pic_for(f['id'], 'type' => 'square'), :style => "border:none;")}
+    .friend_name(style="float:left;width:80px;overflow:hidden;padding:10px;")
+      %a(href="#{go_result_url(:friend => f['id'])}") #{f['name']}

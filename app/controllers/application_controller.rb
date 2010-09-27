@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
       if params[:fb_sig]
         session[:user] = nil
       end
-      if session[:user].blank?
+      if session[:user].blank? or session[:user].token_expired?
         top_redirect_to OAUTH.url_for_oauth_code(:permissions => "user_likes,friends_likes")
       else
         true

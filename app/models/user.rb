@@ -1,22 +1,13 @@
 class User
-  attr_accessor :uid, :session_key, :token, :expires
+  attr_accessor :uid, :session_key, :token
 
   def self.for params
     u = User.new
     u.uid = params[:fb_sig_user] || params[:uid] 
     u.session_key = params[:fb_sig_session_key]
-    if u.session_key
-      token_hash = OAUTH.get_token_and_expiration_from_session_key(u.session_key)
-      u.token = token_hash[:token]
-      u.expires = token_hash[:expires]
-    end
+    u.token = OAUTH.get_token_from_session_key(u.session_key) if u.session_key
     u.token ||= params[:token]
-    u.expires ||= params[:expires]
     u
-  end
-
-  def token_expired?
-    self.expires && self.expires <= Time.now
   end
 
   def pic args

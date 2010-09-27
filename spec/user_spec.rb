@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User, "for" do
   before(:each) do 
     @bob = User.for(:fb_sig_user => 12345, :fb_sig_session_key => 'key')
-    @joe = User.for(:uid => 54321, :token => @bob.token, :expires => @bob.expires)
+    @joe = User.for(:uid => 54321, :token => "*")
   end
 
   it "bob created from fb parameters should get a token" do
@@ -32,14 +32,6 @@ describe User, "for" do
 
   it "joe should have liked PhotoVoo! before bob" do
     @joe.likes_before(@bob).first.name.should == "PhotoVoo!"
-  end
-
-  it "bob's token should be expired" do
-    @bob.token_expired?.should == true
-  end
-
-  it "joe's token is passed from bob and thus should also be expired" do
-    @joe.token_expired?.should == true
   end
 
 end

@@ -79,11 +79,11 @@ graph_api:
       post:
         with_token: '{"id": "FEED_ITEM_CONTEXT"}'
         
-  12345:
+  /koppel:
     no_args:
       get:
-        with_token: '{"id": 1, "name": "Bob Smith", "updated_time": 1}'
-        no_token: '{"id": 1, "name": "Bob Smith"}'
+        with_token: '{"id": 1, "name": 1, "updated_time": 1}'
+        no_token: '{"id": 1, "name": 1}'
                 
   /contextoptional:
     no_args:

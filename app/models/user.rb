@@ -51,6 +51,7 @@ class User
     @likes = nil
     @graph = nil
     @profile = nil
+    @friends = nil
   end
 
   private

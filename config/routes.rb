@@ -1,9 +1,11 @@
 Pinkydata::Application.routes.draw do
 
-  get "go/choose"
-  get "go/result"
-  get "go/cb"
-  post "go/set_third_party_cookie_fix"  # part of the fix for safari with third party cookie prevention 
+  match "go/choose", :via => ['get','post']
+  match "go/result", :via => ['get','post']
+  match "go/cb", :via => ['get','post']
+  
+  post "go/set_third_party_cookie_fix"  # part of the fix for safari with third party cookie prevention
+
   root :controller => "go", :action => "choose"
 
   # The priority is based upon order of creation:

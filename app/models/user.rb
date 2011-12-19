@@ -1,12 +1,10 @@
 class User
-  attr_accessor :uid, :session_key, :token
+  attr_accessor :uid, :token
 
   def self.for params
     u = User.new
-    u.uid = params[:fb_sig_user] || params[:uid] 
-    u.session_key = params[:fb_sig_session_key]
-    u.token = OAUTH.get_app_access_token
-    u.token ||= params[:token]
+    u.uid = params[:user_id]
+    u.token = params[:oauth_token]
     u
   end
 
@@ -44,7 +42,7 @@ class User
   end
 
   def likes_before friend
-    likes_intersecting_with(friend).select{|l| friend.likes.find{|fl| fl == l}.created_time > l.created_time}
+    likes_intersecting_with(friend).select{|l| l.created_time.present? and friend.likes.find{|fl| fl == l}.created_time.to_i > l.created_time.to_i}
   end
 
   def clear_for_placement_into_cookies
@@ -57,7 +55,7 @@ class User
   private
 
   def graph
-    @graph ||= Koala::Facebook::GraphAPI.new(self.token)
+    @graph ||= Koala::Facebook::API.new(self.token)
   end
 
 end

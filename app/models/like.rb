@@ -9,7 +9,7 @@ class Like
     self.uid = raw_data['id']
     self.name = raw_data['name']
     self.category = raw_data['category']
-    self.created_time = Time.parse raw_data['created_time']
+    self.created_time = raw_data['created_time'].present? ? (Time.parse raw_data['created_time']) : nil
   end
 
   def <=>(other)

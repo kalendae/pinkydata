@@ -6,20 +6,31 @@ class ApplicationController < ActionController::Base
 
   helper_method :user
 
+  APP_PERMISSIONS = "user_likes,friends_likes"
+
   def facebook_auth_check
-    if params[:fb_sig_user] and params[:fb_sig_session_key]
-      session[:user] = User.for(params)
-      true
-    else
-      if params[:fb_sig]
+    if params[:signed_request]
+      signed_request = HashWithIndifferentAccess.new(OAUTH.parse_signed_request(params[:signed_request]))
+      if signed_request[:oauth_token].present? and signed_request[:user_id].present?
+        session[:user] = User.for(signed_request)
+        true
+      else
         session[:user] = nil
+        oauth_redirect
+        false
       end
+    else
       if session[:user].blank?
-        top_redirect_to OAUTH.url_for_oauth_code(:permissions => "user_likes,friends_likes")
+        oauth_redirect
+        false
       else
         true
       end
     end
+  end
+
+  def oauth_redirect
+    top_redirect_to OAUTH.url_for_oauth_code(:permissions => APP_PERMISSIONS)
   end
 
   # part of the fix for safari with third party cookie prevention 

@@ -9,7 +9,7 @@ class GoController < ApplicationController
   end
 
   def result
-    @friend = User.for(:uid => params[:friend], :token => user.token)
+    @friend = User.for(:user_id => params[:friend], :oauth_token => user.token)
     respond_to do |format|
       format.html
     end

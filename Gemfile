@@ -5,14 +5,16 @@ gem 'rails', '3.0.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'mysql2', '< 0.3'
 gem 'wirble'
 gem 'json'
-gem 'koala'
+gem 'koala', '1.2.1'
 gem 'haml'
 gem 'ruby-debug'
 gem "rspec", ">= 2.0.0.beta.22"
 gem "rspec-rails", ">= 2.0.0.beta.22"
+gem 'awesome_print',     '0.2.1',        :require => 'ap'
+
 #gem "autotest"
 
 # Use unicorn as the web server

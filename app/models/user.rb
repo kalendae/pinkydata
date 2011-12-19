@@ -5,7 +5,7 @@ class User
     u = User.new
     u.uid = params[:fb_sig_user] || params[:uid] 
     u.session_key = params[:fb_sig_session_key]
-    u.token = OAUTH.get_token_from_session_key(u.session_key) if u.session_key
+    u.token = OAUTH.get_app_access_token
     u.token ||= params[:token]
     u
   end
